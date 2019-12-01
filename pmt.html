@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">	
+	<title></title>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		var HTTP_SRV_URL = "http://127.0.0.1/pub/c2s_pmt_share";
+		
+		function sendHttpMsg(url, method, params, callback) {
+		    if(params == null) params = {}
+		    $.ajax({
+		         url: url,
+		         type: method,
+		         data : params,
+		         dataType:"json",
+		         success: function(ret) {
+		            callback(null, ret)
+		         },
+		         error : function(xhr){
+		            callback("http srv error", null)
+		         }
+		     });
+		}
+
+		function getQueryString(name){
+	         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	         var r = window.location.search.substr(1).match(reg);
+	         if(r!=null) return  r[2]; return null;
+	    }
+
+		$(document).ready(function() {
+			var pid = getQueryString("pid")
+			if(pid == null) return window.location.href='http://www.baidu.com';
+			sendHttpMsg(HTTP_SRV_URL, "POST", { owner : pid }, function(err, jret){
+				window.location.href='http://www.baidu.com';
+			});
+		})
+	</script>
+
+</body>
+</html>
